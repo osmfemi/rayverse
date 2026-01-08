@@ -1,5 +1,3 @@
-
-
 s64 performance_counter_frequency;
 s32 monitor_refresh_hz;
 
@@ -14,7 +12,7 @@ float get_seconds_elapsed(s64 start, s64 end) {
 }
 
 void message_box(const char* message) {
-	MessageBoxA(global_app_state.win32.window, message, "Rayverse", MB_ICONERROR);
+	MessageBoxA(global_app_state.win32.window, message, "RAYMAN", MB_ICONERROR);
 }
 
 WINDOWPLACEMENT window_position = { sizeof(window_position) };
@@ -269,7 +267,7 @@ int main(int argc, char** argv) {
 	window_class.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	window_class.lpfnWndProc = main_window_callback;
 	window_class.hInstance = app_state->win32.instance;
-	window_class.lpszClassName = "Rayverse";
+	window_class.lpszClassName = "RAYMAN";
 	window_class.hbrBackground = NULL;
 
 	if (!RegisterClass(&window_class)) {
@@ -288,7 +286,7 @@ int main(int argc, char** argv) {
 	int initial_width = desired_window_rect.right - desired_window_rect.left;
 	int initial_height = desired_window_rect.bottom - desired_window_rect.top;
 
-	app_state->win32.window = CreateWindowEx(0, window_class.lpszClassName, "Rayverse", window_style, 0, 0, 
+	app_state->win32.window = CreateWindowEx(0, window_class.lpszClassName, "RAYMAN", window_style, 0, 0, 
 		initial_width, initial_height, NULL, NULL, app_state->win32.instance, 0);
 
 	if (!app_state->win32.window) {
