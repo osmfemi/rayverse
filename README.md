@@ -3,6 +3,8 @@ Work-in-progress modern port of Rayman 1 for PC (version 1.21), based on the dis
 
 The aim is to provide a drop-in replacement for the original executable RAYMAN.EXE that works on modern platforms (including Windows, Linux and macOS).
 
+This branch aims to add new features and improves to the game.
+
 ## Build instructions
 
 ### Windows
