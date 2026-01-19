@@ -182,13 +182,19 @@ void INIT_WORLD_STAGE_NAME(void) {
                     strcpy(text_to_display[2].text, language_txt[161]); // /password/
                 } break;
                 case 1: {
-                    strncpy(text_to_display[2].text, save_ray[0], 4);
+                    strcpy(text_to_display[2].text, "/");
+                    strncat(text_to_display[2].text, save_ray[0], 4);
+                    strcat(text_to_display[2].text, "/");
                 } break;
                 case 2: {
-                    strncpy(text_to_display[2].text, save_ray[1], 4);
+                    strcpy(text_to_display[2].text, "/");
+                    strncat(text_to_display[2].text, save_ray[1], 4);
+                    strcat(text_to_display[2].text, "/");
                 } break;
                 case 3: {
-                    strncpy(text_to_display[2].text, save_ray[2], 4);
+                    strcpy(text_to_display[2].text, "/");
+                    strncat(text_to_display[2].text, save_ray[2], 4);
+                    strcat(text_to_display[2].text, "/");
                 } break;
                 default: break;
             }
