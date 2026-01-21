@@ -24,6 +24,7 @@
 #include <math.h>
 #include <time.h>
 
+#define GAME_NAME "RAYMAN" // Change the game name here, it will be displayed in the title bar and Task Manager
 
 #ifdef _MSC_VER
 #if _MSC_VER < 1900

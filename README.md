@@ -3,7 +3,12 @@ Work-in-progress modern port of Rayman 1 for PC (version 1.21), based on the dis
 
 The aim is to provide a drop-in replacement for the original executable RAYMAN.EXE that works on modern platforms (including Windows, Linux and macOS).
 
+## New features
 This branch aims to add new features and improves to the game.
+
+- GAME_NAME macro: The GAME_NAME macro allows you to set the game's name in one central place. This name will be displayed different locations, like the title bar and the Task Manager
+- macOS Application Bundle: Adds a Shell Script that copies the new executable into a .app bundle, this also changes the location of the game save data to a game folder in ~/Library/Application Support
+- Icon for Windows .exe: Adds the original icon to the rayverse.exe
 
 ## Build instructions
 

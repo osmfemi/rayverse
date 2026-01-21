@@ -20,7 +20,7 @@ void linux_sleep(u32 ms) {
 }
 
 void message_box(const char* message) {
-    SDL_ShowSimpleMessageBox(0, "Rayverse", message, global_app_state.sdl.window);
+    SDL_ShowSimpleMessageBox(0, GAME_NAME, message, global_app_state.sdl.window);
 }
 
 void toggle_fullscreen(SDL_Window* window) {
@@ -115,11 +115,11 @@ int main(int argc, char** argv) {
 //    if (window_start_maximized) {
 //        window_flags |= SDL_WINDOW_MAXIMIZED;
 //    }
-    SDL_Window* window = SDL_CreateWindow("Rayverse", 
-                                          SDL_WINDOWPOS_CENTERED, 
+    SDL_Window* window = SDL_CreateWindow(GAME_NAME,
                                           SDL_WINDOWPOS_CENTERED,
-                                          desired_window_width, 
-                                          desired_window_height, 
+                                          SDL_WINDOWPOS_CENTERED,
+                                          desired_window_width,
+                                          desired_window_height,
                                           window_flags);
     if (!window) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window and renderer: %s", SDL_GetError());
