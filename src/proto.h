@@ -93,6 +93,15 @@ void clock_ticks(void);
 void wait_until(s32 target);
 void speaker_enable(void);
 
+// lowlevel.c (re-implemented from Rayman Designer)
+void draw_pixel_to_display_buffer(s16 x, s16 y, u8 color);
+void draw_pixel_to_buffer(u8* buffer, s16 x, s16 y, u8 color);
+void draw_horizontal_line_to_display_buffer(s16 start_x, s16 start_y, s16 width, u8 color);
+void draw_horizontal_line_to_draw_buffer(s16 start_x, s16 start_y, s16 width, u8 color);
+void draw_vertical_line_to_display_buffer(s16 start_x, s16 start_y, s16 height, u8 color);
+void draw_vertical_line_to_draw_buffer(s16 start_x, s16 start_y, s16 height, u8 color);
+void draw_collision_box(s16 x, s16 y, s16 width, s16 height);
+
 // pcmain.c
 void InitData(void);
 void DO_GROS_MOTEUR_NORMAL(u8 need_update_display_map);
@@ -141,6 +150,7 @@ void CLRSCR(void);
 void display_etoile(s16 in_x, s16 in_y);
 void display_grp_stars(void);
 void DISPLAY_TEXT_FEE(void);
+void display_mini_map(void); // Re-implemented from Rayman Designer
 void DISPLAY_SAVE_SPRITES(s16 x, s16 save_index);
 void DISPLAY_SAVE_POING(void);
 void DISPLAY_OPTIONS_POING(void);
