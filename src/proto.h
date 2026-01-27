@@ -101,6 +101,7 @@ void draw_horizontal_line_to_draw_buffer(s16 start_x, s16 start_y, s16 width, u8
 void draw_vertical_line_to_display_buffer(s16 start_x, s16 start_y, s16 height, u8 color);
 void draw_vertical_line_to_draw_buffer(s16 start_x, s16 start_y, s16 height, u8 color);
 void draw_collision_box(s16 x, s16 y, s16 width, s16 height);
+void draw_deformed_line(u8* buffer, s16 x1, s16 y1, s16 x2, s16 y2, u8 color);
 
 // pcmain.c
 void InitData(void);
@@ -151,11 +152,14 @@ void display_etoile(s16 in_x, s16 in_y);
 void display_grp_stars(void);
 void DISPLAY_TEXT_FEE(void);
 void display_mini_map(void); // Re-implemented from Rayman Designer
+void calculate_link_positions(mem_t* mem); // Re-implemented from Rayman Designer
+bool get_link_line(s16 obj_id, s16* out_x1, s16* out_y1, s16* out_x2, s16* out_y2); // Re-implemented from Rayman Designer
+void display_obj_links(void); // Re-implemented from Rayman Designer
 void DISPLAY_SAVE_SPRITES(s16 x, s16 save_index);
 void DISPLAY_SAVE_POING(void);
 void DISPLAY_OPTIONS_POING(void);
 void DISPLAY_YESNO_POING(void);
-void display_time(s32 a1);
+void display_time(s16 time);
 void DISPLAY_CONTINUE_SPR(void);
 void AFFICHE_SPRITE_DEFORME(void* a1, s32 a2, s16 a3, s16 a4, s16 a5, s16 a6, s16 a7, s16 a8, s16 a9, s16 a10);
 void DISPLAY_DEFORMATION(obj_t* obj, s16 a2, s16 a3, s16 a4);
@@ -193,7 +197,7 @@ bool cd_playing(void);
 bool EOA(obj_t* obj);
 void save_objects_flags(void);
 void restore_objects_flags(void);
-void snapToSprite(obj_t* obj1, obj_t* obj2, u8 a3, s16 a4, s16 a5);
+void snapToSprite(obj_t* obj_1, obj_t* obj_2, u8 obj_2_spr, s32 x_offs, u16 y_offs);
 obj_t* findfirstObject(s16 obj_type);
 void findfirstInactiveObject(s16 a1);
 s32 sinYspeed(obj_t* obj, s16 a2, s16 a3, s16* a4);
@@ -1110,12 +1114,12 @@ void FIN_GAME_MODE_NORMAL(void);
 // ngawe.c
 void ngaweFollowsShip(obj_t* obj);
 void ngaweTriesToGrabShip(obj_t* obj);
-void allocatePirateNgaweRing(obj_t* obj, s16 a2, u8 a3);
+void allocatePirateNgaweRing(obj_t* ngw_obj, s16 spd_y, u8 param_3);
 void DO_NGW_TIR(obj_t* obj);
 void NGW_REACT_TO_RAY_IN_ZONE(obj_t* obj);
 void DO_ONE_NGW_COMMAND(obj_t* obj);
-void DO_NGW_POING_COLLISION(obj_t* obj, s16 sprite);
-void DO_ONE_NGW_RING_COMMAND(obj_t* obj);
+void DO_NGW_POING_COLLISION(obj_t* ngw_obj, s16 sprite);
+void DO_ONE_NGW_RING_COMMAND(obj_t* ring_obj);
 
 // mathutil.c
 void set2bits(u32 * x, u8 index, u32 value);

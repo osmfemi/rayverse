@@ -299,7 +299,7 @@ void obj_init(obj_t* obj) {
             break;
         case TYPE_176_CRAYON_BAS:
         case TYPE_240_CRAYON_HAUT:
-            obj->anim_frame = myRand(obj->animations[obj->anim_index].frame_count - 1);
+            obj->anim_frame = myRand(obj->animations[obj->anim_index].frames_count - 1);
             break;
         case TYPE_191_FALLING_CRAYON:
         case TYPE_235_PUNAISE4:
@@ -761,7 +761,7 @@ void INIT_OBJECTS(u8 a1) {
                 reduced_rayman_id = i;
             } break;
             case TYPE_145_KILLING_EYES: {
-                obj->iframes_timer = 0;
+                obj->iframes_timer = 40;
             } break;
             case TYPE_147_MST_SCROLL: {
                 if (obj->hit_points == 0) {

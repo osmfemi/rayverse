@@ -523,7 +523,7 @@ s32 DO_PESANTEUR(obj_t* obj) {
 //56734
 void freezeAnim(obj_t* obj, u8 a2) {
     /* 2C45C 80150C5C -O2 -msoft-float */
-    s16 count = obj->animations[obj->anim_index].frame_count - 1;
+    s16 count = obj->animations[obj->anim_index].frames_count - 1;
     s32 count_capped;
 
     if (obj->eta[obj->main_etat][obj->sub_etat].flags & 0x10)
@@ -572,7 +572,7 @@ void DO_ANIM(obj_t* obj) {
     anim_t* anim = obj->animations + obj->anim_index;
     if ((obj->change_anim_mode == ANIMMODE_RESET_IF_NEW && obj->anim_index != prev_anim_index) || obj->change_anim_mode == ANIMMODE_RESET) {
         if (eta->flags & eta_flags_0x10_anim_reverse) {
-            obj->anim_frame = anim->frame_count - 1;
+            obj->anim_frame = anim->frames_count - 1;
         } else {
             obj->anim_frame = 0;
         }
@@ -580,10 +580,10 @@ void DO_ANIM(obj_t* obj) {
             PlaySnd(eta->sound_index, obj->id);
         }
     }
-    if (obj->anim_frame >= anim->frame_count || obj->anim_frame == 255) {
+    if (obj->anim_frame >= anim->frames_count || obj->anim_frame == 255) {
         // animation ended
-        obj->main_etat = eta->next_etat;
-        obj->sub_etat = eta->next_subetat;
+        obj->main_etat = eta->next_main_etat;
+        obj->sub_etat = eta->next_sub_etat;
         eta = get_eta(obj);
         obj->anim_index = eta->anim_index;
         anim = obj->animations + obj->anim_index;
@@ -595,7 +595,7 @@ void DO_ANIM(obj_t* obj) {
             }
         }
         if (eta->flags & eta_flags_0x10_anim_reverse) {
-            obj->anim_frame = anim->frame_count - 1;
+            obj->anim_frame = anim->frames_count - 1;
         } else {
             obj->anim_frame = 0;
         }
@@ -2637,7 +2637,7 @@ void restore_gendoor_link(void) {
 //5A8E4
 void DONE_MOTEUR_LEVEL(void) {
     /* 34FEC 801597EC -O2 -msoft-float */
-    restore_gendoor_link(); //TODO
+    restore_gendoor_link();
     if (!bonus_map && departlevel && get_next_bonus_level(num_level) == 0 && !fin_continue) {
         doneGameSave();
     }
@@ -2741,8 +2741,8 @@ void DO_MOTEUR(void) {
 
 //5AC70
 void DO_MOTEUR2(void) {
-    DO_WIZ_AFTER_BONUS_MAP(); //TODO
-    DO_PERFECT_BONUS_MAP(); //TODO
+    DO_WIZ_AFTER_BONUS_MAP();
+    DO_PERFECT_BONUS_MAP();
     DO_OBJECTS_ANIMS();
     if (ray.flags.alive) {
         if (dead_time != 64) {
@@ -2756,7 +2756,7 @@ void DO_MOTEUR2(void) {
                 if (ray.main_etat != 6) {
                     set_main_and_sub_etat(&ray, 6, 0);
                 }
-                DO_RAY_ON_MS(); //TODO
+                DO_RAY_ON_MS();
             } break;
             case MODE_3_MORT_DE_RAYMAN:
             case MODE_4_MORT_DE_RAYMAN_ON_MS: {
@@ -2767,14 +2767,14 @@ void DO_MOTEUR2(void) {
             } break;
             default: {
                 // NOTE: ray_mode is set to negative when the free movement cheat is enabled.
-                DO_PLACE_RAY(); //TODO
+                DO_PLACE_RAY();
             } break;
         }
         if (NumScrollObj <= 0 || ray_mode <= MODE_0_NONE) {
             scroll_x = -1;
             scroll_y = -1;
         } else {
-            DO_AUTO_SCROLL(); //TODO: fix scroll speed in map with flat stone with ropes
+            DO_AUTO_SCROLL();
         }
         MOVE_OBJECTS();
         calc_obj_pos(&ray);
