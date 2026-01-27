@@ -86,7 +86,7 @@ void display2(obj_t* obj) {
         s16 spr_x; s16 spr_y; s16 spr_w; s16 spr_h;
 
         // We don't need to do this since we don't use the display buffer, but re-implemented for consistency
-        byte* saved_display_buffer = display_buffer;
+        u8* saved_display_buffer = display_buffer;
         display_buffer = draw_buffer;
 
         // Draw pivot (bx/by)
@@ -956,6 +956,102 @@ void display_mini_map(void) {
     }
 }
 
+// Re-implemented from Rayman Designer
+void calculate_link_positions(mem_t* mem) {
+    debug_obj_links_x_pos = (s16*)block_malloc(mem, level.nb_objects * sizeof(s16));
+    debug_obj_links_y_pos = (s16*)block_malloc(mem, level.nb_objects * sizeof(s16));
+    debug_obj_is_linked = (bool*)block_malloc(mem, level.nb_objects * sizeof(bool));
+
+    s16 max_x = (mp.width * 16 + 63) >> 6;
+    s16 max_y = (mp.height * 16 + 63) >> 6;
+
+    for (s16 obj_id = 0; obj_id < level.nb_objects; obj_id++) {
+        obj_t* obj = &level.objects[obj_id];
+
+        // TODO: animations might be NULL, causing a crash - should we then calculate x/y in another way?
+        if (!obj->animations) {
+            continue;
+        }
+
+        anim_frame_t* frame = obj->animations[obj->anim_index].frames + obj->anim_frame;
+        s16 link_x = ((frame->width >> 1) + frame->x + obj->x) >> 6;
+        s16 link_y = ((frame->height >> 1) + frame->y + obj->y) >> 6;
+        if (link_x >= max_x) {
+            link_x = max_x - 1;
+        }
+        if (link_y >= max_y) {
+            link_y = max_y - 1;
+        }
+        if (link_x < 0) {
+            link_x = 0;
+        }
+        if (link_y < 0) {
+            link_y = 0;
+        }
+
+        s16 link_obj_id = obj_id;
+        do {
+            debug_obj_links_x_pos[link_obj_id] = link_x;
+            debug_obj_links_y_pos[link_obj_id] = link_y;
+            link_obj_id = link_init[link_obj_id];
+        } while (link_obj_id != obj_id);
+
+        debug_obj_is_linked[obj_id] = link_init[link_obj_id] != obj_id;
+    }
+}
+
+// Re-implemented from Rayman Designer
+bool get_link_line(s16 obj_id, s16* out_x1, s16* out_y1, s16* out_x2, s16* out_y2) {
+    bool is_on_screen;
+
+    obj_t* obj = &level.objects[obj_id];
+    // TODO: animations might be NULL, causing a crash; check that this workaround is right?
+    if (!obj->animations) {
+        return false;
+    }
+    anim_frame_t* frame = obj->animations[obj->anim_index].frames + obj->anim_frame;
+
+    *out_x1 = (obj->x - xmap) + 8 + frame->x + (frame->width >> 1);
+    *out_y1 = (obj->y - ymap) + frame->y + (frame->height >> 1);
+    
+    *out_x2 = debug_obj_links_x_pos[obj_id] * 64 + 40 - xmap;
+    *out_y2 = debug_obj_links_y_pos[obj_id] * 64 + 32 - ymap;
+    
+    is_on_screen = false;
+    if (*out_x1 < 404 && *out_y1 < 292 && *out_x1 > -100 && *out_y1 > -100) {
+        is_on_screen = true;
+    }
+    if (*out_x2 < 404 && *out_y2 < 292 && *out_x2 > -100 && *out_y2 > -100) {
+        is_on_screen = true;
+    }
+    return is_on_screen;
+}
+
+// Re-implemented from Rayman Designer
+void display_obj_links(void) {
+    for (s16 obj_id = 0; obj_id < level.nb_objects; obj_id++) {
+        obj_t* obj = &level.objects[obj_id];
+
+        s16 x1; s16 y1; s16 x2; s16 y2;
+        if (get_link_line(obj_id, &x1, &y1, &x2, &y2)) {
+            if ((flags[obj->type] & flags3_0x40_no_link) == 0 || (flags[obj->type] & flags3_0x20_link_requires_gendoor) != 0) {
+                // Don't draw if not linked
+                if (!debug_obj_is_linked[obj_id])
+                    continue;
+
+                u8 color = 30;
+
+                draw_deformed_line(draw_buffer, x1, y1, x2, y2, color);
+
+                draw_horizontal_line_to_draw_buffer(x2 - 4, y2 - 4, 8, color);
+                draw_horizontal_line_to_draw_buffer(x2 - 4, y2 + 4, 8, color);
+                draw_vertical_line_to_draw_buffer(x2 - 4, y2 - 4, 8, color);
+                draw_vertical_line_to_draw_buffer(x2 + 4, y2 - 4, 8, color);
+            }
+        }
+    }
+}
+
 //1B0E0
 void DISPLAY_SAVE_SPRITES(s16 x, s16 save_index) {
     s16 y = save_index * (ecarty + 23) + debut_options - 23;
@@ -1017,8 +1113,54 @@ void DISPLAY_YESNO_POING(void) {
 }
 
 //1B56C
-void display_time(s32 a1) {
-    print_once("Not implemented: display_time"); //stub
+void display_time(s16 time) {
+    // NOTE(Falcury): based on the PC version (the PS1 version is slightly different)
+    obj_t *sbar_obj;
+    char text[24];
+    u8 nb_wiz_text[8];
+    s32 time_div;
+    u32 col;
+    u32 col_add;
+
+    sbar_obj = &level.objects[sbar_obj_id];
+    if (time != -2) {
+        u8 seconds = time / 60 % 10;
+        u8 tens = time / 600 % 10;
+        u8 hundreds = time / 6000 % 10;
+        s16 x_offset = 0;
+
+        display_text(language_txt[159], Bloc_lim_W2 - 52, Bloc_lim_H2 - 32, 2, 5); // /time/
+        if (hundreds != 0) {
+            display_sprite(sbar_obj, hundreds + 28, Bloc_lim_W2 - 50, Bloc_lim_H2 - 30, 1);
+            x_offset = 15;
+        }
+        display_sprite(sbar_obj, tens + 28, Bloc_lim_W2 - 50 + x_offset, Bloc_lim_H2 - 30, 1);
+        display_sprite(sbar_obj, seconds + 28, Bloc_lim_W2 - 35 + x_offset, Bloc_lim_H2 - 30, 1);
+
+        if (map_time > 100) {
+            if (map_time <= 160 && map_time > 120) {
+                strcpy(text, "/go !/");
+                display_text(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0, 5);
+            }
+        } else {
+            ray.is_active = 0;
+            snprintf(text, sizeof(text), language_txt[156], nb_wiz); // /%d tings to get/
+            if (horloge[8] < 4) {
+                col = PC_TingsToGet_Col;
+                col_add = PC_TingsToGet_ColAdd;
+                PC_TingsToGet_Col = col + col_add;
+                if (PC_TingsToGet_Col >= 6) {
+                    PC_TingsToGet_ColAdd *= -1;
+                    PC_TingsToGet_Col = 5;
+                } else if (PC_TingsToGet_Col == 0) {
+                    PC_TingsToGet_ColAdd *= -1;
+                    PC_TingsToGet_Col = 1;
+                }
+
+                display_text(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2, PC_TingsToGet_Col);
+            }
+        }
+    }
 }
 
 //1B79C

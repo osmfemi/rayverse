@@ -141,6 +141,11 @@ void DO_MAIN_LOOP_PC_NORMAL(u8* a1) {
             display_mini_map();
         }
 
+        // Re-implemented from Rayman Designer
+        if (debug_show_obj_links) {
+            display_obj_links();
+        }
+
         if (TOUCHE(SC_ESCAPE)) {
             if (nb_fade == 0 && !GoMenu) {
                 if (!get_casse_brique_ON() && !ModeDemo && !gele && dead_time == 64) {
@@ -271,7 +276,7 @@ void PcMain(void) {
     atexit(ToDoAtExit);
     Init_Clavier();
     InitMemoryVariable();
-    sprite_clipping(0, 320, 0, 200);
+    sprite_clipping(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT);
     WaitNSynchro(10); // added
     INIT_MOTEUR_BEGIN();
     FIRST_INIT();
@@ -304,7 +309,7 @@ void PcMain(void) {
             SPECIAL_INIT();
             default_sprite_clipping();
             DO_WORLD_MAP();
-            sprite_clipping(0, 320, 0, 200);
+            sprite_clipping(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT);
             DEPART_WORLD();
             if (!SonLimite) {
                 LoadBnkWorld(num_world_choice);
@@ -361,7 +366,7 @@ void PcMain(void) {
                     }
 
                     InitModeNormalWithFrequency(VGA_FREQ);
-                    sprite_clipping(0, 320, 0, 200);
+                    sprite_clipping(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT);
                     START_LEVEL_ANIM();
                     if (ExitMenu) {
                         INIT_CONTINUE();

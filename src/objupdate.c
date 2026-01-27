@@ -426,7 +426,7 @@ void DO_WIZARD(obj_t* obj) {
                 set_sub_etat(&ray, 11);
             }
 
-            if (obj->anim_frame >= obj->animations[obj->anim_index].frame_count - 1)
+            if (obj->anim_frame >= obj->animations[obj->anim_index].frames_count - 1)
             {
                 set_sub_etat(obj, 0);
                 fix_numlevel(obj);
@@ -887,7 +887,7 @@ void DoGeneratingDoorRaymanCollision(obj_t* obj) {
 
 //620E4
 void DO_REDUCTEUR(obj_t* obj) {
-    if (obj->hit_points < obj->init_hit_points) {
+    if ((u8)obj->hit_points < (u8)obj->init_hit_points) {
         --obj->hit_points;
         if (obj->hit_points == 0) {
             obj->hit_points = obj->init_hit_points;
@@ -1160,7 +1160,7 @@ void DoChasseurRaymanZDD(obj_t* obj) {
 void DO_CHASSEUR_COMMAND(obj_t* obj) {
     DO_ONE_CMD(obj);
     if (obj->detect_zone_flag == 0 && obj->main_etat == 0 && obj->sub_etat == 21) {
-        if (obj->anim_frame >= obj->animations[obj->anim_index].frame_count - 1) {
+        if (obj->anim_frame >= obj->animations[obj->anim_index].frames_count - 1) {
             set_main_and_sub_etat(obj, 0, 0);
         }
     }
@@ -1314,11 +1314,11 @@ void DO_ENSEIGNE_COMMAND(obj_t* obj) {
         if (obj->main_etat == 0 && obj->sub_etat == 0)
             skipToLabel(obj, 1, true);
 
-        if (obj->main_etat == 0 && obj->sub_etat == 1 && obj->anim_frame >= obj->animations[1].frame_count - 1) {
+        if (obj->main_etat == 0 && obj->sub_etat == 1 && obj->anim_frame >= obj->animations[1].frames_count - 1) {
             skipToLabel(obj, 2, true);
         }
 
-        if (obj->main_etat == 0 && obj->sub_etat == 2 && obj->anim_frame >= obj->animations[2].frame_count - 1) {
+        if (obj->main_etat == 0 && obj->sub_etat == 2 && obj->anim_frame >= obj->animations[2].frames_count - 1) {
             skipToLabel(obj, 1, true);
         }
     } else {
@@ -2013,7 +2013,7 @@ void DO_SPECIAL_PLATFORM(obj_t* obj) {
             if (obj->sub_etat == 7)
             {
                 if (
-                        obj->anim_frame == obj->animations[obj->anim_index].frame_count - 1 &&
+                        obj->anim_frame == obj->animations[obj->anim_index].frames_count - 1 &&
                         horloge[obj->eta[obj->main_etat][obj->sub_etat].anim_speed & 0xf] == 0
                         )
                 {
