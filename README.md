@@ -3,16 +3,16 @@ Work-in-progress modern port of Rayman 1 for PC (version 1.21), based on the dis
 
 The aim is to provide a drop-in replacement for the original executable RAYMAN.EXE that works on modern platforms (including Windows, Linux and macOS).
 
-## New features
-This branch aims to add new features and improves to the game. The following additions are planned:
+## New features branch
+This branch aims to add new features and improvements to the game. The following additions are planned:
 
 - GAME_NAME macro: The GAME_NAME macro allows you to set the game's name in one central place. This name will be displayed in different locations, such as the title bar and the Task Manager
 - macOS Application Bundle: Adds a shell script that copies the new executable into a .app bundle, this also changes the location of the save and config files to a game folder in `~/Library/Application Support`
 - Icon for Windows executable: Adds build options to include an app icon to the executable
 - Run on world map: After you beat Mr Stone, you can run on the world map
-- Adds the ability to change direction while walking between levels on the world map
-- Different resolutions/aspect ratios: Change the resolution to the PS1 320x240 (4:3 Aspect Ratio), other options are possible
-- Change Soundtrack: Choose between PC, PS1, GBA or other platform specific soundtracks
+- Turn back halfway on the world map: Adds the ability to change direction while walking between levels on the world map
+- Different resolutions/aspect ratios: Change the resolution to the PS1 320x240 (4:3 Aspect Ratio) resolution, other options are possible
+- Change Soundtrack: Choose between PC, PS1, GBA and other platform specific soundtracks
 
 ## Build instructions
 
