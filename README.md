@@ -6,10 +6,10 @@ The aim is to provide a drop-in replacement for the original executable RAYMAN.E
 ## New features
 This branch aims to add new features and improves to the game.
 
-- GAME_NAME macro: The GAME_NAME macro allows you to set the game's name in one central place. This name will be displayed different locations, like the title bar and the Task Manager
-- macOS Application Bundle: Adds a Shell Script that copies the new executable into a .app bundle, this also moves the location of the game save data to a game folder in ~/Library/Application Support
+- GAME_NAME macro: The GAME_NAME macro allows you to set the game's name in one central place. This name will be displayed in different locations, such as the title bar and the Task Manager
+- macOS Application Bundle: Adds a shell script that copies the new executable into a .app bundle, this also changes the location of the save and config files to a game folder in `~/Library/Application Support`
 - Icon for Windows executable: Adds build options to include an app icon to the executable
-- Run on world map: After you beat Mr Stone you can run on the world map
+- Run on world map: After you beat Mr Stone, you can run on the world map
 - Adds the ability to change direction while walking between levels on the world map
 
 ## Build instructions
