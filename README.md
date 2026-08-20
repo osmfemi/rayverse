@@ -1,3 +1,9 @@
+This fork of Reverse contains different forks:
+- original_fork: an up-to-date fork of the original repository
+- new_features: adding new features and improvements to the game
+- ports: ports to other platforms, will be splitted later
+- test: testing commits and merge functionality of git
+
 # Rayverse
 Work-in-progress modern port of Rayman 1 for PC (version 1.21), based on the disassembly of the original.
 
